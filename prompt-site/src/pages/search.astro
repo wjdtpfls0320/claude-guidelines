@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import { fields } from '../data/fields';
+import { loadPublicPrompts } from '../lib/prompt-loader';
+
+// 결과가 없을 때 제안할 태그. 많이 쓰인 순서로 둡니다.
+const counts = new Map<string, number>();
+for (const prompt of loadPublicPrompts()) {
+  for (const tag of prompt.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+}
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
+---
+
+<Base title="검색" hideHeaderSearch noindex>
+  <div class="page-head">
+    <h1>프롬프트 검색</h1>
+  </div>
+  <div data-search data-tags={JSON.stringify(tags)}>
+    <form class="search-form" action="/search/" method="get" role="search">
+      <label class="sr-only" for="search-q">검색어</label>
+      <input class="input" id="search-q" name="q" type="search" placeholder="제목, 상황, 태그로 찾기" autocomplete="off" />
+      <button class="button primary" type="submit">검색</button>
+    </form>
+    <p class="note mt" role="status" aria-live="polite" data-status></p>
+
+    <ul class="prompt-list plain" data-results hidden></ul>
+
+    <div class="notice mt" data-empty hidden>
+      <p><strong data-empty-title></strong></p>
+      <p class="mt">비슷한 태그로 찾아보기</p>
+      <ul class="badges mt" data-suggestions></ul>
+      <p class="mt">분야에서 고르기</p>
+      <ul class="inline-links">
+        {
+          fields.map((field) => (
+            <li>
+              <a href={`/field/${field.slug}/`}>{field.name}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <noscript>
+    <p class="notice warn">검색은 자바스크립트가 켜져 있어야 동작합니다. 위의 분야 탭에서 골라 주세요.</p>
+  </noscript>
+</Base>
+
+<script>
+  import '../scripts/search.ts';
+</script>

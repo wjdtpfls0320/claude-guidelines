@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import FieldIcon from '../components/FieldIcon.astro';
+import { fields } from '../data/fields';
+import { site } from '../data/site';
+import { itemLabel } from '../lib/guideline-parser';
+import { groupBySituation } from '../lib/group';
+import { loadGuideline, loadPublicPrompts, loadUpdates } from '../lib/prompt-loader';
+
+const guideline = loadGuideline();
+const prompts = loadPublicPrompts(guideline);
+const labels = new Map(guideline.items.map((item) => [item.key, itemLabel(item)]));
+const recent = loadUpdates().slice(0, 3);
+const cards = fields.map((field) => {
+  const groups = groupBySituation(field, prompts);
+  return { field, count: groups.reduce((sum, group) => sum + group.prompts.length, 0), groups };
+});
+---
+
+<Base hideHeaderSearch>
+  <div class="home-intro">
+    <h1>{site.tagline}</h1>
+    <form class="search-form" action="/search/" method="get" role="search">
+      <label class="sr-only" for="home-q">프롬프트 검색</label>
+      <input class="input" id="home-q" name="q" type="search" placeholder="예) 버그, 기획서, 사업계획서, 이메일" autocomplete="off" />
+      <button class="button" type="submit">검색</button>
+    </form>
+    <div class="notice guide-band">
+      <p>
+        <strong>지침을 먼저 설정하세요.</strong> 여기 프롬프트는 AI 개인 설정에 지침을 넣어둔 상태를 전제로 짧게 썼습니다.
+      </p>
+      <a class="button" href="/guideline/">지침 복사하고 설정하기</a>
+    </div>
+  </div>
+
+  <section aria-labelledby="fields-heading">
+    <h2 class="sr-only" id="fields-heading">분야 고르기</h2>
+    <ul class="field-grid">
+      {
+        cards.map(({ field, count, groups }) => (
+          <li>
+            <a class="field-card" href={`/field/${field.slug}/`}>
+              <FieldIcon icon={field.icon} />
+              <span class="name">{field.name}</span>
+              <span class="count">{count > 0 ? `프롬프트 ${count}개` : '준비 중'}</span>
+              <ul class="situations">
+                {groups.length > 0 ? (
+                  groups.slice(0, 4).map((group) => <li>{group.situation}</li>)
+                ) : (
+                  <li>{field.description}</li>
+                )}
+                {groups.length > 4 && <li>외 {groups.length - 4}가지 상황</li>}
+              </ul>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="section" aria-labelledby="recent-heading">
+    <h2 id="recent-heading">최근 업데이트</h2>
+    <ul class="update-list">
+      {
+        recent.map((entry) => (
+          <li>
+            <time datetime={entry.날짜}>{entry.날짜}</time>
+            <div class="body">
+              <ul class="badges" aria-label="바뀐 지침 항목">
+                {entry.지침항목.map((key) => (
+                  <li>
+                    <span class="badge">{labels.get(key) ?? key}</span>
+                  </li>
+                ))}
+              </ul>
+              <p>{entry.요약}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="note mt"><a href="/updates/">업데이트 기록 전체 보기</a></p>
+  </section>
+</Base>

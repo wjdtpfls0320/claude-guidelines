@@ -1,0 +1,63 @@
+---
+import { fields } from '../data/fields';
+import { site } from '../data/site';
+
+interface Props {
+  currentField?: string;
+  hideSearch?: boolean;
+}
+
+const { currentField, hideSearch = false } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+  { href: '/guideline/', label: '지침 시작하기' },
+  { href: '/updates/', label: '업데이트 기록' },
+];
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="site-name" href="/">{site.name}</a>
+    <nav aria-label="주요 메뉴">
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={link.href} aria-current={path.startsWith(link.href) ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    {
+      !hideSearch && (
+        <form class="header-search" action="/search/" method="get" role="search">
+          <label class="sr-only" for="header-q">
+            프롬프트 검색
+          </label>
+          <input class="input" id="header-q" name="q" type="search" placeholder="프롬프트 검색" autocomplete="off" />
+          <button class="button" type="submit">
+            검색
+          </button>
+        </form>
+      )
+    }
+  </div>
+  <nav class="field-tabs" aria-label="분야">
+    <div class="wrap">
+      <ul>
+        {
+          fields.map((field) => (
+            <li>
+              <a href={`/field/${field.slug}/`} aria-current={currentField === field.slug ? 'page' : undefined}>
+                {field.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import PromptList from '../../components/PromptList.astro';
+import { fields, type Field } from '../../data/fields';
+import { groupBySituation } from '../../lib/group';
+import { loadGuideline, loadPublicPrompts } from '../../lib/prompt-loader';
+
+export function getStaticPaths() {
+  return fields.map((field) => ({ params: { slug: field.slug }, props: { field } }));
+}
+
+interface Props {
+  field: Field;
+}
+
+const { field } = Astro.props;
+const guideline = loadGuideline();
+const groups = groupBySituation(field, loadPublicPrompts(guideline));
+const others = fields.filter((other) => other.slug !== field.slug);
+---
+
+<Base title={`${field.name} 프롬프트`} description={`${field.name}: ${field.description}`} currentField={field.slug}>
+  <div class="page-head">
+    <h1>{field.name}</h1>
+    <p>{field.description}</p>
+  </div>
+
+  {
+    groups.length === 0 ? (
+      <div class="notice">
+        <p>
+          <strong>이 분야 프롬프트는 준비 중이에요.</strong> 지침이 바뀐 뒤 다시 검토하고 있는 프롬프트는 검토가 끝날
+          때까지 목록에서 내려둡니다.
+        </p>
+        <ul class="inline-links mt">
+          {others.map((other) => (
+            <li>
+              <a href={`/field/${other.slug}/`}>{other.name}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ) : (
+      groups.map((group) => (
+        <section class="situation">
+          <h2>{group.situation}</h2>
+          <PromptList prompts={group.prompts} items={guideline.items} />
+        </section>
+      ))
+    )
+  }
+</Base>

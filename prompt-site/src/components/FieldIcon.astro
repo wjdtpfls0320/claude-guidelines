@@ -1,0 +1,31 @@
+---
+// 분야 아이콘. 직접 그린 선 그림이라 이용권 문제가 없습니다. 옆에 분야 이름이 있어서 화면 읽기 프로그램에서는 숨깁니다.
+import type { Field } from '../data/fields';
+
+interface Props {
+  icon: Field['icon'];
+}
+
+const paths: Record<Field['icon'], string[]> = {
+  code: ['M8 7l-5 5 5 5', 'M16 7l5 5-5 5', 'M13.5 5l-3 14'],
+  chart: ['M4 20V4', 'M4 20h16', 'M8 16v-4', 'M12 16V8', 'M16 16v-6'],
+  document: ['M6 3h8l4 4v14H6z', 'M14 3v4h4', 'M9 12h6', 'M9 16h6'],
+  layout: ['M3 5h18v14H3z', 'M3 9h18', 'M9 9v10'],
+  pen: ['M4 20l1-4L16 5l3 3L8 19z', 'M14 7l3 3'],
+  book: ['M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4z', 'M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6z'],
+  chat: ['M4 5h16v11H10l-4 4v-4H4z'],
+};
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {paths[Astro.props.icon].map((d) => <path d={d} />)}
+</svg>

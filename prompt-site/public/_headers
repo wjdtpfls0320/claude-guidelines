@@ -1,0 +1,10 @@
+# Cloudflare Pages 보안 헤더.
+# 스크립트와 스타일은 이 사이트의 파일만 허용합니다. 'wasm-unsafe-eval'은 검색(Pagefind)이 쓰는 WebAssembly 때문에 필요합니다.
+# Cloudflare Web Analytics를 켜면 script-src에 https://static.cloudflareinsights.com,
+# connect-src에 https://cloudflareinsights.com 을 추가해야 합니다.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()

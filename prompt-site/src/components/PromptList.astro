@@ -1,0 +1,28 @@
+---
+import ItemBadges from './ItemBadges.astro';
+import type { GuidelineItem } from '../lib/guideline-parser';
+import type { LoadedPrompt } from '../lib/prompt-loader';
+
+interface Props {
+  prompts: LoadedPrompt[];
+  items: GuidelineItem[];
+  /** 상황 제목 아래에 붙지 않고 혼자 쓰일 때 위쪽 선을 그립니다. */
+  plain?: boolean;
+}
+
+const { prompts, items, plain = false } = Astro.props;
+---
+
+<ul class:list={['prompt-list', { plain }]}>
+  {
+    prompts.map((prompt) => (
+      <li>
+        <a class="title" href={`/prompt/${prompt.id}/`}>
+          {prompt.title}
+        </a>
+        <p class="desc">{prompt.description}</p>
+        <ItemBadges class="meta" keys={prompt.items} items={items} linked={false} />
+      </li>
+    ))
+  }
+</ul>

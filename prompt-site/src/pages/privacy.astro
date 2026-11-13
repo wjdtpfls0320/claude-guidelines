@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import DraftNotice from '../components/DraftNotice.astro';
+import { site } from '../data/site';
+---
+
+<Base title="개인정보처리방침 (초안)">
+  <article class="prose">
+    <h1>개인정보처리방침 (초안)</h1>
+    <DraftNotice />
+    <p>
+      {site.name}(이하 "사이트")은 회원가입과 로그인이 없고, 이용자가 입력한 내용을 서버에 저장하지 않습니다. 아래는
+      사이트를 운영하면서 처리될 수 있는 정보를 정리한 것입니다.
+    </p>
+
+    <h2>1. 처리하는 개인정보와 목적</h2>
+    <table>
+      <thead>
+        <tr><th scope="col">언제</th><th scope="col">항목</th><th scope="col">목적</th><th scope="col">보유 기간</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>사이트에 접속할 때</td>
+          <td>IP 주소, 브라우저 종류, 접속 시각, 방문한 페이지 (호스팅 서비스가 자동으로 처리)</td>
+          <td>사이트 제공, 보안, 장애 대응</td>
+          <td><span class="placeholder">[채울 자리: 호스팅 서비스의 로그 보관 기간 확인]</span></td>
+        </tr>
+        <tr>
+          <td>방문 통계 (출시할 때 넣을 예정)</td>
+          <td>
+            방문한 페이지, 유입 경로, 브라우저와 기기 종류 등 이용 기록
+            <span class="placeholder">[채울 자리: 출시 전 실제 수집 항목 확인]</span>
+          </td>
+          <td>어떤 프롬프트가 쓰이는지 파악해 사이트를 고치기 위해</td>
+          <td><span class="placeholder">[채울 자리: 통계 도구의 보관 기간 확인]</span></td>
+        </tr>
+        <tr>
+          <td>이메일로 문의할 때</td>
+          <td>이메일 주소, 문의 내용</td>
+          <td>문의에 답하기 위해</td>
+          <td><span class="placeholder">[채울 자리: 예) 답변 후 1년]</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      프롬프트의 빈칸에 입력한 내용은 이용자의 브라우저 안에서만 쓰이며, 사이트 서버로 보내거나 저장하지 않습니다.
+      페이지를 닫으면 사라집니다.
+    </p>
+
+    <h2>2. 쿠키 등 자동 수집 장치</h2>
+    <p>
+      사이트는 쿠키를 심지 않습니다. 방문 통계에는 쿠키를 쓰지 않는 도구(Cloudflare Web Analytics)를 쓸 예정입니다.
+      검색 기능은 이용자의 브라우저 안에서 동작하며 검색어를 서버로 보내지 않습니다. 쿠키를 쓰게 되면 이 항목에 종류,
+      목적, 거부 방법(브라우저 설정에서 쿠키 차단)을 적습니다.
+    </p>
+    <p>
+      방문 통계는 이용 기록(행태정보)을 수집할 수 있습니다. 사이트는 이 정보를 맞춤형 광고에 쓰지 않습니다. <strong
+        >[전문가 확인]</strong
+      > 광고 도구를 넣게 되면 동의가 필요한지 확인합니다.
+    </p>
+
+    <h2>3. 처리 위탁과 국외 이전</h2>
+    <table>
+      <thead>
+        <tr><th scope="col">받는 곳</th><th scope="col">맡기는 일</th><th scope="col">이전되는 나라</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cloudflare, Inc. (예정)</td>
+          <td>사이트 호스팅(Cloudflare Pages), 방문 통계(Cloudflare Web Analytics)</td>
+          <td>
+            <span class="placeholder">[채울 자리: 이전 국가, 이전 일시와 방법, 보유 기간, 연락처]</span>
+            <strong>[전문가 확인]</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>4. 제3자 제공</h2>
+    <p>사이트는 법령에 따른 경우를 빼고 개인정보를 제3자에게 제공하지 않습니다.</p>
+
+    <h2>5. 파기</h2>
+    <p>보유 기간이 지났거나 처리 목적을 이룬 개인정보는 지체 없이 지웁니다. 문의 이메일은 보유 기간이 지나면 삭제합니다.</p>
+
+    <h2>6. 이용자의 권리</h2>
+    <p>
+      이용자는 자신의 개인정보에 대해 열람, 정정, 삭제, 처리 정지를 요청할 수 있습니다. 가입 기능이 없어 사이트 안에 요청
+      화면은 없으며, 아래 연락처로 요청하면 지체 없이 처리합니다.
+    </p>
+
+    <h2>7. 안전성 확보 조치</h2>
+    <p>
+      사이트는 서버 프로그램과 데이터베이스가 없는 정적 사이트입니다. 모든 페이지를 HTTPS로 제공하고, 보안 헤더로 외부
+      스크립트 실행을 제한합니다.
+    </p>
+
+    <h2>8. 개인정보 보호책임자</h2>
+    <ul>
+      <li>이름: <span class="placeholder">[채울 자리: 보호책임자 이름]</span></li>
+      <li>연락처: <span class="placeholder">{site.contactEmail}</span></li>
+    </ul>
+
+    <h2>9. 만 14세 미만 아동</h2>
+    <p>사이트는 가입을 받지 않으며 만 14세 미만 아동의 개인정보를 따로 수집하지 않습니다.</p>
+
+    <h2>10. 바뀐 내용 알리기</h2>
+    <p>이 방침이 바뀌면 이 페이지에 바뀐 날짜와 내용을 적습니다.</p>
+    <p>시행일: <span class="placeholder">[채울 자리: 시행일]</span></p>
+  </article>
+</Base>

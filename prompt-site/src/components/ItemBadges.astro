@@ -1,0 +1,31 @@
+---
+// 프롬프트가 기대는 지침 항목 배지. 누르면 지침 페이지의 그 항목으로 갑니다.
+import { itemAnchor, itemLabel, type GuidelineItem } from '../lib/guideline-parser';
+
+interface Props {
+  keys: string[];
+  items: GuidelineItem[];
+  /** 목록에서는 링크 없이 글자만 보여줍니다(행 전체가 이미 프롬프트 링크라서). */
+  linked?: boolean;
+  class?: string;
+}
+
+const { keys, items, linked = true, class: className } = Astro.props;
+const labels = new Map(items.map((item) => [item.key, itemLabel(item)]));
+---
+
+<ul class:list={['badges', className]} aria-label="기대는 지침 항목">
+  {
+    keys.map((key) => (
+      <li>
+        {linked ? (
+          <a class="badge" href={`/guideline/#${itemAnchor(key)}`}>
+            {labels.get(key)}
+          </a>
+        ) : (
+          <span class="badge">{labels.get(key)}</span>
+        )}
+      </li>
+    ))
+  }
+</ul>

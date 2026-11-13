@@ -1,0 +1,48 @@
+---
+// 지침 항목 본문을 문단과 목록으로 나눠 보여줍니다. "- "로 시작하는 줄은 목록, "  - "는 한 단계 안쪽 목록입니다.
+interface Props {
+  body: string;
+}
+
+type Block = { type: 'p'; text: string } | { type: 'ul'; items: { text: string; children: string[] }[] };
+
+const blocks: Block[] = [];
+for (const line of Astro.props.body.split('\n')) {
+  if (line.trim() === '') continue;
+  const last = blocks[blocks.length - 1];
+  if (/^\s+- /.test(line) && last?.type === 'ul' && last.items.length > 0) {
+    last.items[last.items.length - 1].children.push(line.trim().slice(2));
+  } else if (line.trim().startsWith('- ')) {
+    const item = { text: line.trim().slice(2), children: [] };
+    if (last?.type === 'ul') last.items.push(item);
+    else blocks.push({ type: 'ul', items: [item] });
+  } else {
+    blocks.push({ type: 'p', text: line.trim() });
+  }
+}
+---
+
+<div class="guideline-body">
+  {
+    blocks.map((block) =>
+      block.type === 'p' ? (
+        <p>{block.text}</p>
+      ) : (
+        <ul>
+          {block.items.map((item) => (
+            <li>
+              {item.text}
+              {item.children.length > 0 && (
+                <ul>
+                  {item.children.map((child) => (
+                    <li>{child}</li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      ),
+    )
+  }
+</div>
